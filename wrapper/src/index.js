@@ -286,14 +286,25 @@ export default class Aragon {
       // When using cache, fetch events from the next block after cache
       fromBlock: cachedPermissions ? cachedBlockNumber + 1 : undefined
     }
-    const pastEvents$ = this.aclProxy.pastEvents(null, pastEventsOptions).pipe(
-      mergeMap((pastEvents) => from(pastEvents)),
-      // Custom cache event
-      endWith({
-        event: ACL_CACHE_KEY,
-        returnValues: {}
+    this.pastEventsOptions = pastEventsOptions
+
+    // modified pastEvents$ to get a promise instead of an observable
+    async function pastEvents$() {
+      return new Promise( resolve => {
+        this.aclProxy.pastEvents(null, pastEventsOptions).pipe(
+          mergeMap((pastEvents) => from(pastEvents)),
+          // Custom cache event
+          endWith({
+            event: ACL_CACHE_KEY,
+            returnValues: {}
+          })
+        )
+        .subscribe(resolve)
       })
-    )
+    }
+
+    this.pastEvents = pastEvents$
+        
     const currentEvents$ = this.aclProxy.events(null, { fromBlock: cacheBlockHeight + 1 }).pipe(
       startWith({
         event: 'starting current events',
