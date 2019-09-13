@@ -6,6 +6,7 @@ const dappwallDAO = new Aragon('0xeeda0bD313b8042B360Ac6755e01D7970860c445',
 }) // rinkeby ensRegistry
 
 // '0xeeda0bD313b8042B360Ac6755e01D7970860c445' --> dappwalltest0.aragonid.eth
+// '0x40923e3215243b4a51bf411f9873d02f5bacfd60' --> voting app proxy
 
 dappwallDAO.init()
 .then( () => {
@@ -13,9 +14,20 @@ dappwallDAO.init()
     // console.log('aclProxy is ', dappwallDAO.aclProxy)
     console.log('past events options are ', dappwallDAO.pastEventsOptions)
 
-    dappwallDAO.pastEvents()
-    .then( data => {
-        console.log('data from pastEvents', data) // working!
-    })
-})
+    // dappwallDAO.pastEvents()
+    // .then( data => {
+    //     console.log('data from pastEvents', data) // working!
+    // })
 
+    dappwallDAO.runApp('0x40923e3215243b4a51bf411f9873d02f5bacfd60')
+    .then( data => {
+        console.log('data is ', data)
+    })
+
+    // dappwallDAO.getApp('0x40923e3215243b4a51bf411f9873d02f5bacfd60')
+    // .then( data => {
+    //     console.log('data is ', data)
+    // })
+
+
+})
