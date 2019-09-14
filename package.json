@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel index.js wrapper -d dist",
+    "build": "babel index.js node_modules/@aragon/wrapper -d dist",
     "start": "npm run build && node dist/index.js"
   },
   "author": "",
