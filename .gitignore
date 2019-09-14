@@ -2,4 +2,3 @@ node_modules
 .vscode
 .babelrc.disabled
 dist
-wrapper-index.js
