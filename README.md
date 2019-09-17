@@ -19,10 +19,10 @@ For it to work you need to copy the `artifacts` folder inside the `wrapper` into
 ```
 cp -r node_modules/@aragon/wrapper/artifacts/ dist/
 ```
-And `apps-artifacts` too:
+And `apps-abis` too:
 
 ```
-cp -r app-artifacts dist/
+cp -r app-abis dist/
 ```
 
 Also, I am copy-pasting the `wrapper-index.js` file into `node_modules/@aragon/wrapper/src/index.js`.
