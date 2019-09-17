@@ -4,6 +4,10 @@ The main `index.js` is run, calling functions from the imported `Aragon` class f
 
 Currently calling `pastEvents()`, `getApp()` and `runApp()`.
 
+### Usage
+
+Run `npm run start` after every change (I know, it is too much hassle xD I will look for alternatives)
+
 ### Goal
 
 First Goal: be able to subscribe to all the events occurring in a specific DAO. 
