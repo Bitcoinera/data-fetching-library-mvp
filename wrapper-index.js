@@ -265,14 +265,18 @@ export default class Aragon {
     if (!aclAddress) {
       aclAddress = await this.kernelProxy.call('acl')
     }
-
+    let votingAppAddress = '0x40923e3215243b4a51bf411f9873d02f5bacfd60';
     // Set up ACL proxy
     this.aclProxy = makeProxy(aclAddress, 'ACL', this.web3, { initializationBlock: this.kernelProxy.initializationBlock })
+
+    // Set up Voting proxy 
+    this.votingProxy = makeProxy(votingAppAddress, 'Voting', this.web3, { initializationBlock: this.kernelProxy.initializationBlock })
 
     const SET_PERMISSION_EVENT = 'SetPermission'
     const CHANGE_PERMISSION_MANAGER_EVENT = 'ChangePermissionManager'
 
     const ACL_CACHE_KEY = getCacheKey(aclAddress, 'acl')
+    const VOTING_CACHE_KEY = getCacheKey(votingAppAddress, 'voting')
 
     const REORG_SAFETY_BLOCK_AGE = 100
 
@@ -291,20 +295,34 @@ export default class Aragon {
     }
     this.pastEventsOptions = pastEventsOptions
 
-    const pastEvents$ = this.aclProxy.pastEvents(null, pastEventsOptions).pipe(
-      mergeMap((pastEvents) => from(pastEvents)),
-      // Custom cache event
-      endWith({
-        event: ACL_CACHE_KEY,
-        returnValues: {}
+    // modified pastEvents$ to get a promise instead of an observable
+    async function pastEvents$() {
+      return new Promise( resolve => {
+        this.votingProxy.pastEvents(null, pastEventsOptions).pipe(
+          mergeMap((pastEvents) => from(pastEvents)),
+          // Custom cache event
+          // endWith({
+          //   event: VOTING_CACHE_KEY,
+          //   returnValues: {}
+          // })
+        )
+        .subscribe( data => console.log(data))
       })
-    )
-    const currentEvents$ = this.aclProxy.events(null, { fromBlock: cacheBlockHeight + 1 }).pipe(
-      startWith({
-        event: 'starting current events',
-        returnValues: {}
-      })
-    )
+    }
+    this.pastEvents = pastEvents$
+
+    async function currentEvents$() {
+      return new Promise( resolve => {
+        this.votingProxy.events(null, { fromBlock: 4843439 }).pipe(
+          startWith({
+            event: 'starting current events',
+            returnValues: {}
+          })
+        )
+        .subscribe( data => console.log(data))
+      }) 
+    } 
+    this.currentEvents = currentEvents$
 
     // Permissions Object:
     // { app -> role -> { manager, allowedEntities -> [ entities with permission ] } }
@@ -1236,7 +1254,8 @@ export default class Aragon {
         handlers.createRequestHandler(request$, 'search_identities', handlers.searchIdentities),
 
         // Etc.
-        handlers.createRequestHandler(request$, 'notification', handlers.notifications)
+        handlers.createRequestHandler(request$, 'notification', handlers.notifications),
+
         ).subscribe(
         (response) => {
           messenger.sendResponse(response.id, response.payload)
