@@ -79,7 +79,7 @@ import { LocalIdentityProvider } from './identity'
 import { getAbi } from './interfaces'
 
 // Artifacts
-import artifactsVotingApp from '../apps-artifacts/VotingApp.json'
+import artifactsVotingApp from '../apps-artifacts/Voting.json'
 
 // Try to get an injected web3 provider, return a public one otherwise.
 export const detectProvider = () =>
@@ -1176,7 +1176,7 @@ export default class Aragon {
     const checkABI = ( abi ) => {
       if (!app.abi) {
         console.log('\n\n No ABI found')
-        app.abi = artifactsVotingApp
+        app.abi = artifactsVotingApp.abi
         
         return app
       }
@@ -1184,7 +1184,7 @@ export default class Aragon {
     
     checkABI(app.abi)
 
-    // console.log('\n\n APP ABI IS ', app.abi)
+    console.log('\n\n APP ABI IS ', app.abi)
 
 
     // TODO: handle undefined (no proxy found), otherwise when calling app.proxyAddress next, it will throw
@@ -1245,7 +1245,7 @@ export default class Aragon {
       ).subscribe(
         (response) => messenger.sendResponse(response.id, response.payload)
       )
-      this.handler = handlerSubscription
+      console.log(`THIS IS ${this}`)
 
       // App context helper function
       function setContext (context) {
