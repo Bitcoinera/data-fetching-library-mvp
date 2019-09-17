@@ -1175,7 +1175,6 @@ export default class Aragon {
 
     const checkABI = ( abi ) => {
       if (!app.abi) {
-        console.log('\n\n No ABI found')
         app.abi = abiVotingApp.abi
         
         return app
@@ -1184,16 +1183,14 @@ export default class Aragon {
     
     checkABI(app.abi)
 
-    console.log('\n\n APP ABI IS ', app.abi)
-
-
     // TODO: handle undefined (no proxy found), otherwise when calling app.proxyAddress next, it will throw
     const appProxy = makeProxyFromABI(app.proxyAddress, app.abi, this.web3)
 
     await appProxy.updateInitializationBlock()
 
     // Step 2: Associate app with running context
-    return (sandboxMessengerProvider) => {
+    const appRunTime = (sandboxMessengerProvider) => {
+
       // Set up messenger
       const messenger = new Messenger(
         sandboxMessengerProvider
@@ -1226,14 +1223,12 @@ export default class Aragon {
         handlers.createRequestHandler(request$, 'sign_message', handlers.signMessage),
         handlers.createRequestHandler(request$, 'events', handlers.events),
         handlers.createRequestHandler(request$, 'past_events', handlers.pastEvents),
-        console.log('\n\n FIRST HANDLER', handlers.createRequestHandler(request$, 'past_events', handlers.pastEvents)),
 
         // External contract handlers
         handlers.createRequestHandler(request$, 'external_call', handlers.externalCall),
         handlers.createRequestHandler(request$, 'external_events', handlers.externalEvents),
         handlers.createRequestHandler(request$, 'external_intent', handlers.externalIntent),
         handlers.createRequestHandler(request$, 'external_past_events', handlers.externalPastEvents),
-        console.log('\n\n SECOND HANDLER', handlers.createRequestHandler(request$, 'external_past_events', handlers.externalPastEvents)),
 
         // Identity handlers
         handlers.createRequestHandler(request$, 'identify', handlers.appIdentifier),
@@ -1242,10 +1237,11 @@ export default class Aragon {
 
         // Etc.
         handlers.createRequestHandler(request$, 'notification', handlers.notifications)
-      ).subscribe(
-        (response) => messenger.sendResponse(response.id, response.payload)
+        ).subscribe(
+        (response) => {
+          messenger.sendResponse(response.id, response.payload)
+        }
       )
-      console.log(`THIS IS ${this}`)
 
       // App context helper function
       function setContext (context) {
@@ -1276,6 +1272,7 @@ export default class Aragon {
         shutdownAndClearCache
       }
     }
+    this.appRunTime = appRunTime
   }
 
   /**

@@ -26,6 +26,7 @@ dappwallDAO.init()
 
     dappwallDAO.runApp('0x40923e3215243b4a51bf411f9873d02f5bacfd60')
     .then( () => {
+        console.log(dappwallDAO.appRunTime())
         // handlers.createRequestHandler(request$, 'past_events', handlers.pastEvents),
     })
 
