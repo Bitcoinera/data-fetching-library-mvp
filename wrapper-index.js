@@ -78,8 +78,8 @@ import { LocalIdentityProvider } from './identity'
 // Interfaces
 import { getAbi } from './interfaces'
 
-// Artifacts
-import artifactsVotingApp from '../apps-artifacts/Voting.json'
+// ABIs
+import abiVotingApp from '../apps-abis/Voting.json'
 
 // Try to get an injected web3 provider, return a public one otherwise.
 export const detectProvider = () =>
@@ -1176,7 +1176,7 @@ export default class Aragon {
     const checkABI = ( abi ) => {
       if (!app.abi) {
         console.log('\n\n No ABI found')
-        app.abi = artifactsVotingApp.abi
+        app.abi = abiVotingApp.abi
         
         return app
       }
