@@ -12,6 +12,13 @@ import abiERC20 from '@aragon/os/abi/ERC20'
 import abiApmRegistry from '@aragon/os/abi/APMRegistry'
 import abiApmRepo from '@aragon/os/abi/Repo'
 import abiApmEnsSubdomainRegistrar from '@aragon/os/abi/ENSSubdomainRegistrar'
+import abiAgentApp from '@aragon/os/abi/Agent' // added for data-fetching
+import abiDAppWallApp from '@aragon/os/abi/DAppWall' // added for data-fetching
+import abiFinanceApp from '@aragon/os/abi/Finance' // added for data-fetching
+import abiPayrollApp from '@aragon/os/abi/Payroll' // added for data-fetching
+import abiSurveyApp from '@aragon/os/abi/Survey' // added for data-fetching
+import abiTokenManagerApp from '@aragon/os/abi/TokenManager' // added for data-fetching
+import abiVaultApp from '@aragon/os/abi/Vault' // added for data-fetching
 import abiVotingApp from '@aragon/os/abi/Voting' // added for data-fetching
 
 // Artifacts
@@ -30,6 +37,13 @@ const ABIS = {
   'aragon/ForwarderFee': abiAragonForwarderFee.abi,
   'aragon/Kernel': abiAragonKernel.abi,
   'aragon/EVM Script Registry': abiAragonEVMScriptRegistry.abi,
+  'aragon/Agent': abiAgentApp.abi, // added for data-fetching
+  'aragon/DAppWall': abiDAppWallApp.abi, // added for data-fetching
+  'aragon/Finance': abiFinanceApp.abi, // added for data-fetching
+  'aragon/Payroll': abiPayrollApp.abi, // added for data-fetching
+  'aragon/Survey': abiSurveyApp.abi, // added for data-fetching
+  'aragon/TokenManager': abiTokenManagerApp.abi, // added for data-fetching
+  'aragon/Vault': abiVaultApp.abi, // added for data-fetching
   'aragon/Voting': abiVotingApp.abi, // added for data-fetching
   'apm/APM Registry': abiApmRegistry.abi,
   'apm/Repo': abiApmRepo.abi,
