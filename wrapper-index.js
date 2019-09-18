@@ -310,7 +310,7 @@ export default class Aragon {
 
     async function currentEvents$() {
       return new Promise( resolve => {
-        this.votingProxy.events(null, { fromBlock: 4843439 }).pipe(
+        this.votingProxy.events(null, { fromBlock: cacheBlockHeight + 1 }).pipe(
           startWith({
             event: 'starting current events',
             returnValues: {}

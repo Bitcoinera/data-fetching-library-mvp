@@ -41,7 +41,7 @@ npm run start
 
 ## How to subscribe to your own DAO's app
 
-1. Change this line `const yourDAO = new Aragon('0xeeda0bD313b8042B360Ac6755e01D7970860c445'` and replace the address with the one of your organization. You can check easily it in the UI at 'Organization'.
+1. Change this line `const yourDAO = new Aragon('0xeeda0bD313b8042B360Ac6755e01D7970860c445'` in the `index.js` file and replace the address with the one of your organization. You can check easily it in the UI at 'Organization'.
 
 2. At line `265` in the `wrapper-index` file, change this line:
 `let votingAppAddress = '0x40923e3215243b4a51bf411f9873d02f5bacfd60'`
