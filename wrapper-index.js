@@ -78,9 +78,6 @@ import { LocalIdentityProvider } from './identity'
 // Interfaces
 import { getAbi } from './interfaces'
 
-// ABIs
-import abiVotingApp from '../apps-abis/Voting.json'
-
 // Try to get an injected web3 provider, return a public one otherwise.
 export const detectProvider = () =>
   typeof web3 !== 'undefined'
@@ -1189,17 +1186,6 @@ export default class Aragon {
     const apps = await this.apps.pipe(first()).toPromise()
 
     const app = apps.find((app) => addressesEqual(app.proxyAddress, proxyAddress))
-    console.log('\n\n APP IS ', app)
-
-    const checkABI = ( abi ) => {
-      if (!app.abi) {
-        app.abi = abiVotingApp.abi
-        
-        return app
-      }
-    }
-    
-    checkABI(app.abi)
 
     // TODO: handle undefined (no proxy found), otherwise when calling app.proxyAddress next, it will throw
     const appProxy = makeProxyFromABI(app.proxyAddress, app.abi, this.web3)
@@ -1207,8 +1193,7 @@ export default class Aragon {
     await appProxy.updateInitializationBlock()
 
     // Step 2: Associate app with running context
-    const appRunTime = (sandboxMessengerProvider) => {
-
+    return (sandboxMessengerProvider) => {
       // Set up messenger
       const messenger = new Messenger(
         sandboxMessengerProvider
@@ -1254,12 +1239,9 @@ export default class Aragon {
         handlers.createRequestHandler(request$, 'search_identities', handlers.searchIdentities),
 
         // Etc.
-        handlers.createRequestHandler(request$, 'notification', handlers.notifications),
-
-        ).subscribe(
-        (response) => {
-          messenger.sendResponse(response.id, response.payload)
-        }
+        handlers.createRequestHandler(request$, 'notification', handlers.notifications)
+      ).subscribe(
+        (response) => messenger.sendResponse(response.id, response.payload)
       )
 
       // App context helper function
@@ -1291,7 +1273,6 @@ export default class Aragon {
         shutdownAndClearCache
       }
     }
-    this.appRunTime = appRunTime
   }
 
   /**
